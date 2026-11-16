@@ -224,4 +224,390 @@
             }
 
             const sampleDays = [
-// ... existing code ... -->
+                {
+                    day: 1,
+                    theme: `${targetDest} 도착 & ${stylePrefix} 감성 시작`,
+                    activities: [
+                        { time: '11:30', title: `${targetDest} 로컬 웰컴 런치`, desc: `${companion} 함께 즐기기 좋은 현지인 추천 대표 메뉴로 여행 시작`, tag: '맛집 탐방' },
+                        { time: '14:00', title: `${targetDest} 시그니처 뷰 카페`, desc: `여유로운 티타임과 사진 남기기 좋은 공간 (방문 전 운영 시간 확인 권장)`, tag: '감성 카페' },
+                        { time: '16:30', title: `${targetDest} 대표 산책 명소`, desc: `선선한 바람을 맞으며 걷기 좋은 대표 힐링 스팟`, tag: '자연/힐링' },
+                        { time: '19:00', title: `${targetDest} 야경 및 저녁 식사`, desc: `분위기 좋은 로컬 다이닝에서 하루 마무리`, tag: '맛집 탐방' }
+                    ]
+                },
+                {
+                    day: 2,
+                    theme: `${interestStr} 중심 핵심 코스`,
+                    activities: [
+                        { time: '09:30', title: `현지인 단골 브런치 & 모닝 커피`, desc: `상쾌한 아침을 여는 동네 숨은 베이커리 카페`, tag: '감성 카페' },
+                        { time: '11:30', title: `${targetDest} 핵심 테마 스팟`, desc: `${companion} 취향을 저격하는 대표 볼거리와 체험 코스`, tag: interests[0] || '인생샷 명소' },
+                        { time: '14:30', title: `${targetDest} 인기 로컬 맛집`, desc: `웨이팅이 있을 수 있으니 방문 전 현장 상황 확인 권장`, tag: '맛집 탐방' },
+                        { time: '17:00', title: `노을 명소 드라이브 & 산책`, desc: `해 질 녘 가장 아름다운 풍경을 감상할 수 있는 포인트`, tag: '인생샷 명소' }
+                    ]
+                },
+                {
+                    day: 3,
+                    theme: `여유로운 마무리 & 기념품 쇼핑`,
+                    activities: [
+                        { time: '10:00', title: `체크아웃 및 아점 식사`, desc: `속이 편안한 로컬 아침 식사 메뉴 추천`, tag: '맛집 탐방' },
+                        { time: '12:30', title: `${targetDest} 소품샵 & 로컬 마켓`, desc: `여행의 추억을 간직할 기념품 및 특산품 구경`, tag: '쇼핑' },
+                        { time: '15:00', title: `공항/역 근처 마지막 티타임`, desc: `출발 전 여유롭게 일정을 정리하는 디저트 타임`, tag: '감성 카페' }
+                    ]
+                },
+                {
+                    day: 4,
+                    theme: `근교 소도시 & 히든 스팟 탐험`,
+                    activities: [
+                        { time: '10:30', title: `${targetDest} 근교 드라이브 코스`, desc: `한적한 풍경을 따라 이동하는 여유로운 오전 일정`, tag: '자연/힐링' },
+                        { time: '13:00', title: `숨은 골목 노포 맛집`, desc: `오랜 세월 사랑받아온 현지인 찐 단골 식당`, tag: '맛집 탐방' },
+                        { time: '16:00', title: `문화 예술 공간 관람`, desc: `지역 특색이 담긴 전시 및 갤러리 산책`, tag: '문화/예술' }
+                    ]
+                },
+                {
+                    day: 5,
+                    theme: `아쉬움을 달래는 마지막 힐링`,
+                    activities: [
+                        { time: '10:00', title: `호텔/숙소 주변 아침 산책`, desc: `조용한 아침 공기를 마시며 즐기는 마지막 산책`, tag: '자연/힐링' },
+                        { time: '12:30', title: `여행 피날레 특식`, desc: `${targetDest}에서 꼭 먹고 가야 할 마지막 한 끼`, tag: '맛집 탐방' }
+                    ]
+                }
+            ];
+
+            const mustEatData = [
+                {
+                    name: `${targetDest} 원조 로컬 식당`,
+                    signature: `대표 시그니처 한상 차림`,
+                    reason: `${routeType} 여행자에게 딱 맞는 현지인 추천 필수 방문지 (방문 전 영업시간 확인 권장)`
+                },
+                {
+                    name: `${targetDest} 골목 노포 국수/탕반`,
+                    signature: `깊은 맛의 현지 전통 메뉴`,
+                    reason: `아침이나 점심 식사로 부담 없이 즐기기 좋은 로컬 찐 맛집`
+                },
+                {
+                    name: `${targetDest} 오션/시티뷰 디저트 로스터리`,
+                    signature: `수제 시그니처 디저트 & 스페셜티 커피`,
+                    reason: `${companion} 함께 인생샷과 휴식을 동시에 챙길 수 있는 공간`
+                }
+            ];
+
+            return {
+                title: `${targetDest} ${duration} 추천 일정`,
+                subtitle: `${companion} 함께하는 ${routeType} (${interestStr})`,
+                days: sampleDays.slice(0, daysCount),
+                mustEat: mustEatData,
+                budget: budgetData
+            };
+        };
+
+        // --- UI 헬퍼 함수 ---
+        const showToast = (msg, isError = false) => {
+            const toast = document.getElementById('toast-message');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = msg;
+            toast.className = isError
+                ? 'bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-2xl text-xs flex items-start gap-2.5 shadow-sm animate-fade-in'
+                : 'bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-2xl text-xs flex items-start gap-2.5 shadow-sm animate-fade-in';
+            toast.classList.remove('hidden');
+        };
+
+        const hideToast = () => {
+            document.getElementById('toast-message').classList.add('hidden');
+        };
+
+        // --- 버튼 그룹 이벤트 연결 (단일 선택) ---
+        function setupSingleSelect(selector, stateKey, activeClasses, inactiveClasses) {
+            const buttons = document.querySelectorAll(selector);
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => {
+                        b.classList.remove(...activeClasses);
+                        b.classList.add(...inactiveClasses);
+                    });
+                    btn.classList.remove(...inactiveClasses);
+                    btn.classList.add(...activeClasses);
+                    state[stateKey] = btn.dataset.value;
+                });
+            });
+        }
+
+        // 기간 버튼 (파란 배경 스타일)
+        setupSingleSelect(
+            '.duration-btn',
+            'duration',
+            ['border-blue-600', 'bg-blue-600', 'text-white', 'font-semibold', 'shadow-sm'],
+            ['border-slate-200', 'bg-slate-50', 'text-slate-600', 'font-medium']
+        );
+
+        // 동행자 버튼 (연한 파란 칩 스타일)
+        setupSingleSelect(
+            '.companion-btn',
+            'companion',
+            ['border-blue-600', 'bg-blue-50', 'text-blue-700', 'font-semibold'],
+            ['border-slate-200', 'bg-slate-50', 'text-slate-600', 'font-medium']
+        );
+
+        // 루트 스타일 버튼 (연한 파란 칩 스타일)
+        setupSingleSelect(
+            '.route-btn',
+            'routeType',
+            ['border-blue-600', 'bg-blue-50', 'text-blue-700', 'font-semibold'],
+            ['border-slate-200', 'bg-slate-50', 'text-slate-600', 'font-medium']
+        );
+
+        // 관심사 버튼 (다중 선택 토글)
+        const interestButtons = document.querySelectorAll('.interest-btn');
+        interestButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const val = btn.dataset.value;
+                const idx = state.interests.indexOf(val);
+                if (idx > -1) {
+                    state.interests.splice(idx, 1);
+                    btn.classList.remove('border-blue-600', 'bg-blue-50', 'text-blue-700', 'font-semibold');
+                    btn.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-600', 'font-medium');
+                } else {
+                    state.interests.push(val);
+                    btn.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-600', 'font-medium');
+                    btn.classList.add('border-blue-600', 'bg-blue-50', 'text-blue-700', 'font-semibold');
+                }
+            });
+        });
+
+        // --- 일정 카드 렌더링 함수 ---
+        let currentRenderedData = null;
+
+        function renderItinerary(data, isMock = false) {
+            currentRenderedData = data;
+            document.getElementById('result-title').textContent = data.title || '맞춤 여행 일정';
+            document.getElementById('result-subtitle').textContent = data.subtitle || '';
+
+            const mockBadge = document.getElementById('mock-badge');
+            if (isMock) {
+                mockBadge.textContent = '예시 데이터';
+                mockBadge.className = 'text-[10px] font-semibold px-2 py-0.5 bg-slate-200 text-slate-600 rounded-md';
+            } else {
+                mockBadge.textContent = 'AI 생성 완료';
+                mockBadge.className = 'text-[10px] font-semibold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-md';
+            }
+
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+
+            // 1. 일자별 일정 카드 렌더링
+            (data.days || []).forEach((dayItem, index) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4 animate-fade-in';
+                card.style.animationDelay = `${index * 0.08}s`;
+
+                const activitiesHtml = (dayItem.activities || []).map((act, actIdx) => {
+                    const isLast = actIdx === dayItem.activities.length - 1;
+                    return `
+                        <div class="relative pl-6 ${isLast ? '' : 'pb-5'}">
+                            ${!isLast ? '<div class="absolute left-[7px] top-3 bottom-0 w-[1.5px] bg-slate-200"></div>' : ''}
+                            <div class="absolute left-0 top-1.5 w-4 h-4 rounded-full bg-blue-50 border-2 border-blue-600"></div>
+                            <div class="flex items-center justify-between gap-2 mb-1">
+                                <span class="text-xs font-bold text-blue-600">${act.time || ''}</span>
+                                ${act.tag ? `<span class="text-[10px] font-medium px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full">${act.tag}</span>` : ''}
+                            </div>
+                            <h4 class="text-sm font-bold text-slate-800">${act.title || ''}</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">${act.desc || ''}</p>
+                        </div>
+                    `;
+                }).join('');
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 bg-blue-600 text-white text-xs font-bold rounded-xl">DAY ${dayItem.day}</span>
+                            <h4 class="text-sm font-bold text-slate-900">${dayItem.theme || ''}</h4>
+                        </div>
+                    </div>
+                    <div class="pt-1">
+                        ${activitiesHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // 2. 꼭 가야 하는 핵심 맛집 카드 렌더링
+            if (data.mustEat && data.mustEat.length > 0) {
+                const eatCard = document.createElement('div');
+                eatCard.className = 'bg-white rounded-3xl p-5 shadow-sm border border-orange-100 space-y-3.5 animate-fade-in';
+                const eatListHtml = data.mustEat.map(item => `
+                    <div class="p-3.5 rounded-2xl bg-orange-50/60 border border-orange-100/80 space-y-1">
+                        <div class="flex items-center justify-between gap-2">
+                            <h5 class="text-sm font-bold text-slate-900">${item.name}</h5>
+                            <span class="text-[10px] font-semibold px-2 py-0.5 bg-orange-100 text-orange-700 rounded-full shrink-0">${item.signature}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">${item.reason}</p>
+                    </div>
+                `).join('');
+
+                eatCard.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-utensils"></i>
+                        </span>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-900">꼭 가야 하는 핵심 맛집</h4>
+                            <p class="text-[11px] text-slate-400">선택한 루트 스타일에 맞춘 엄선 리스트</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2.5">${eatListHtml}</div>
+                `;
+                container.appendChild(eatCard);
+            }
+
+            // 3. 총 예상 경비 카드 렌더링
+            if (data.budget) {
+                const budgetCard = document.createElement('div');
+                budgetCard.className = 'bg-slate-900 text-white rounded-3xl p-5 shadow-md space-y-4 animate-fade-in';
+                const breakdownHtml = (data.budget.breakdown || []).map(b => `
+                    <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-800 last:border-none">
+                        <div>
+                            <span class="font-semibold text-slate-200">${b.category}</span>
+                            <span class="block text-[10px] text-slate-400">${b.note || ''}</span>
+                        </div>
+                        <span class="font-bold text-blue-300">${b.estimate}</span>
+                    </div>
+                `).join('');
+
+                budgetCard.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-[11px] font-medium text-slate-400">1인 기준 총 예상 경비</span>
+                            <h4 class="text-lg font-bold text-white mt-0.5">${data.budget.totalRange}</h4>
+                        </div>
+                        <div class="w-10 h-10 rounded-2xl bg-slate-800 flex items-center justify-center text-blue-400">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/70 rounded-2xl p-3.5 space-y-1">
+                        ${breakdownHtml}
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                        <i class="fa-solid fa-circle-exclamation mr-1 text-slate-500"></i>${data.budget.note || ''}
+                    </p>
+                `;
+                container.appendChild(budgetCard);
+            }
+        }
+
+        // --- API 호출 및 일정 생성 핸들러 ---
+        async function handleGeneratePlan() {
+            const destInput = document.getElementById('destination').value.trim();
+            if (!destInput) {
+                showToast('여행지를 먼저 입력해주세요! (예: 제주도, 도쿄, 부산)', true);
+                document.getElementById('destination').focus();
+                return;
+            }
+
+            state.destination = destInput;
+            hideToast();
+
+            const generateBtn = document.getElementById('generate-btn');
+            const loadingState = document.getElementById('loading-state');
+            const resultSection = document.getElementById('result-section');
+
+            generateBtn.disabled = true;
+            generateBtn.classList.add('opacity-60');
+            loadingState.classList.remove('hidden');
+            resultSection.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/plan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(state)
+                });
+
+                const resultData = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    // 서버가 여행 외 요청 등으로 명확히 거절한 경우 (400 등)
+                    if (response.status === 400 && resultData.error) {
+                        showToast(resultData.error, true);
+                        resultSection.classList.remove('hidden');
+                        return;
+                    }
+                    throw new Error(resultData.error || 'API 서버 응답 오류');
+                }
+
+                renderItinerary(resultData, false);
+                resultSection.classList.remove('hidden');
+
+            } catch (error) {
+                // 아직 /api/plan 서버가 배포되지 않았거나 로컬 미리보기 환경인 경우 예시 일정 표시
+                const mockData = getMockItinerary(
+                    state.destination,
+                    state.duration,
+                    state.companion,
+                    state.routeType,
+                    state.interests
+                );
+                renderItinerary(mockData, true);
+                resultSection.classList.remove('hidden');
+                showToast('현재 미리보기 모드이므로 조건에 맞춘 예시 일정을 표시합니다. (Vercel 배포 시 실제 AI 일정이 생성됩니다)');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('opacity-60');
+                loadingState.classList.add('hidden');
+            }
+        }
+
+        // --- 일정 복사 기능 (iFrame 호환 execCommand 사용) ---
+        document.getElementById('copy-btn').addEventListener('click', () => {
+            if (!currentRenderedData) return;
+
+            let text = `[${currentRenderedData.title}]\n${currentRenderedData.subtitle}\n\n`;
+            (currentRenderedData.days || []).forEach(d => {
+                text += `■ DAY ${d.day}: ${d.theme}\n`;
+                (d.activities || []).forEach(a => {
+                    text += `- ${a.time} ${a.title}: ${a.desc}\n`;
+                });
+                text += '\n';
+            });
+
+            if (currentRenderedData.mustEat) {
+                text += `■ 꼭 가야 하는 핵심 맛집\n`;
+                currentRenderedData.mustEat.forEach(m => {
+                    text += `- ${m.name} (${m.signature}): ${m.reason}\n`;
+                });
+                text += '\n';
+            }
+
+            if (currentRenderedData.budget) {
+                text += `■ 총 예상 경비 (1인 기준): ${currentRenderedData.budget.totalRange}\n`;
+            }
+
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('전체 여행 일정이 클립보드에 복사되었습니다!');
+            } catch (err) {
+                showToast('복사에 실패했습니다. 직접 드래그하여 복사해주세요.', true);
+            }
+            document.body.removeChild(textarea);
+        });
+
+        // --- 초기화 ---
+        document.getElementById('generate-btn').addEventListener('click', handleGeneratePlan);
+
+        // 첫 화면 로드 시 기본 예시 일정 렌더링
+        window.addEventListener('DOMContentLoaded', () => {
+            const initialData = getMockItinerary(
+                state.destination,
+                state.duration,
+                state.companion,
+                state.routeType,
+                state.interests
+            );
+            renderItinerary(initialData, true);
+        });
+    </script>
+</body>
+</html>
